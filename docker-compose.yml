@@ -1,16 +1,17 @@
 services:
   db:
-    image: postgres:16
-    container_name: shoplist_postgres
+    image: mysql:8.0
+    container_name: shoplist_mysql
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: shoplist
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shoplist
+      MYSQL_USER: shoplist
+      MYSQL_PASSWORD: shoplist
     ports:
-      - "5433:5432"
+      - "3307:3306"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - dbdata:/var/lib/mysql
 
   app:
     build: .
@@ -22,14 +23,14 @@ services:
       - db
     environment:
       DB_HOST: db
-      DB_USER: postgres
-      DB_PASSWORD: postgres
+      DB_USER: shoplist
+      DB_PASSWORD: shoplist
       DB_NAME: shoplist
-      DB_PORT: 5432
+      DB_PORT: 3306
       JWT_SECRET: 456546b5565465465465465
     volumes:
       - uploads:/app/uploads
 
 volumes:
-  pgdata:
+  dbdata:
   uploads:
